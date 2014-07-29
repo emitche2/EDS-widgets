@@ -1,0 +1,37 @@
+
+<?php
+//this header line is there so that my ajax on EDS's server can call this file
+header ("Access-Control-Allow-Origin: /***EDS URL GOES HERE***/");
+
+//include database login info
+include(/***MYSQL LOGIN INFO***/);
+
+//get the search term the user sent through
+$searchterm = $_REQUEST['searchterm'];
+
+
+//search the database of library databases to see if this is a database
+$sql = "select * from Subj_dbs where AZ_list='y' and Title='$searchterm'";
+$sql_result = mysql_query($sql, $dbcnx)
+or die ("couldn't execute query");
+$row = mysql_fetch_array($sql_result);
+
+//get all the information into variables
+$title = $row['Title'];
+$url = $row['URL'];
+$description = $row['Description'];
+$description .= $row['Description2'];
+
+//assemble what I'm going to return to EDS for it to display
+if($title != ""){
+	$returnString = "<p style='font-weight:bold;'>Are you looking for a library database?</p><p style='padding-bottom:0px;'><a href='$url' target='_blank' style='font-weight:bold'>$title</a> - $description</p>";
+}
+else{
+	$returnString = null;
+}
+
+//send what we've got back to EDS for it to deal with
+echo($returnString);
+
+
+?>
