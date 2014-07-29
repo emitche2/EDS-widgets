@@ -1,0 +1,47 @@
+<div id="dbsearch" style="display:none">ep.SearchTerm</div>
+<div id="displayDBinfo" style="display:none"><!-- we'll use JS to put the database here, if there is one --></div>
+
+<!-- include jquery so we can use $() -->
+<script type="text/javascript" language="Javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+
+<script type="text/javascript">
+
+var searchterm = document.getElementById('dbsearch').innerHTML;
+
+//get ready to call the PHP page
+var httpRequest;
+if (window.XMLHttpRequest) { // Mozilla, Safari, ...
+    httpRequest = new XMLHttpRequest();
+} else if (window.ActiveXObject) { // IE 8 and older
+    httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+}
+
+//be ready with what you'll do with the PHP page's response
+httpRequest.onreadystatechange = function(){
+  //if you got a response already
+  if (httpRequest.readyState === 4){
+  	//chop off the whitespace on the result so we can see if there's any content
+  	var responseText = httpRequest.responseText.replace(/^\s+|\s+$/g, '');
+  	//if it wasn't an error, and there's content
+  	if(httpRequest.status === 200 && responseText != ""){
+			//put this sucker on the screen
+			    resultdiv1 = '<div id="placard_widget_dbs"  style="border:4px solid #FFCC33;background-color:#FFFFFF;padding:10px;"><div style="float:left; padding:10px; font-size:120%;">' + responseText + '</div> ';	
+					resultdiv1+='</div></div>';   
+				  	$('.result-list', window.parent.document).before(resultdiv1);
+						$('.related-info-area:contains("placard_widget_dbs")', window.parent.document).css('display','none');
+				}
+				else {
+				    $('.related-info-area:contains("placard_widget_dbs")', window.parent.document).css('display','none');
+				}
+  }
+  
+} // end of the function that handles our response
+
+
+//actually do it
+httpRequest.open('GET', 'http://oswego.edu/library2/resources/eds_db_widget.html?searchterm=' + searchterm, true);
+httpRequest.send(null);
+
+
+</script>
