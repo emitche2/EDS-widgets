@@ -39,7 +39,7 @@ httpRequest.onreadystatechange = function(){
 
 
 //actually do it
-httpRequest.open('GET', 'http://oswego.edu/library2/resources/eds_db_widget.html?searchterm=' + searchterm, true);
+httpRequest.open('GET', /***URL OF OTHER FILE GOES HERE, WITH ?searchterm= ON THE END***/ + searchterm, true);
 httpRequest.send(null);
 
 
