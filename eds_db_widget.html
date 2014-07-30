@@ -1,7 +1,12 @@
 
 <?php
-//this header line is there so that my ajax on EDS's server can call this file
-header ("Access-Control-Allow-Origin: /***EDS BASE URL***/");
+//this bit is to limit it so that only EDS (or, I guess, other EBSCOhost products) can call this script
+$origin = $_SERVER['HTTP_ORIGIN'];
+//if .ebscohost.com is included in the origin, 
+if(stristr($origin, ".ebscohost.com")){
+	//allow this origin to call this script
+	header ("Access-Control-Allow-Origin: $origin");
+}
 
 //include database login info
 include("/***MYSQL LOGIN INFO***/");
