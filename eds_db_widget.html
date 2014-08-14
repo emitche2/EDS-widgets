@@ -14,39 +14,42 @@ include("/***MYSQL LOGIN INFO***/");
 //get the search term the user sent through
 $searchterm = $_REQUEST['searchterm'];
 
+//if the searchterm isn't blank
+if($searchterm != ""){
 
-//search the database of library databases to see if this is a database
-$sql = "select * from Subj_dbs where AZ_list='y' and Title like '$searchterm%'";
-$sql_result = mysql_query($sql, $dbcnx)
-or die ("couldn't execute query");
-
-
-//begin returnString, so this part only appears once
-$returnString = "<p style='font-weight:bold;'>Are you looking for a library database?</p>";
-
-//foundOne lets us keep track of whether we've actually got content to return to EDS or not
-$foundOne = false;
-
-while($row = mysql_fetch_array($sql_result)){
-	//set foundOne to true because we did find at least one
-	$foundOne = true;
+	//search the database of library databases to see if this is a database
+	$sql = "select * from Subj_dbs where AZ_list='y' and Title like '$searchterm%'";
+	$sql_result = mysql_query($sql, $dbcnx)
+	or die ("couldn't execute query");
 	
-	//get all the information into variables
-	$title = $row['Title'];
-	$url = $row['URL'];
-	$description = $row['Description'];
-	$description .= $row['Description2'];
 	
-	//assemble what I'm going to return to EDS for it to display
-	if($title != ""){
-		$returnString .= "<p><a href='$url' target='_blank' style='font-weight:bold'>$title</a> - $description</p>";
+	//begin returnString, so this part only appears once
+	$returnString = "<p style='font-weight:bold;'>Are you looking for a library database?</p>";
+	
+	//foundOne lets us keep track of whether we've actually got content to return to EDS or not
+	$foundOne = false;
+	
+	while($row = mysql_fetch_array($sql_result)){
+		//set foundOne to true because we did find at least one
+		$foundOne = true;
+		
+		//get all the information into variables
+		$title = $row['Title'];
+		$url = $row['URL'];
+		$description = $row['Description'];
+		$description .= $row['Description2'];
+		
+		//assemble what I'm going to return to EDS for it to display
+		if($title != ""){
+			$returnString .= "<p><a href='$url' target='_blank' style='font-weight:bold'>$title</a> - $description</p>";
+		}
 	}
-}
-
-//if we didn't find anything, clear out the returnString
-if(!$foundOne){
-	$returnString = null;
-}
+	
+	//if we didn't find anything, clear out the returnString
+	if(!$foundOne){
+		$returnString = null;
+	}
+} //end of if they sent through a search
 
 //send what we've got back to EDS for it to deal with
 echo($returnString);
