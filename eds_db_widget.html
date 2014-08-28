@@ -12,7 +12,7 @@ if(stristr($origin, ".ebscohost.com")){
 include("/***MYSQL LOGIN INFO***/");
 
 //get the search term the user sent through
-$searchterm = $_REQUEST['searchterm'];
+$searchterm = mysql_real_escape_string($_REQUEST['searchterm']);
 
 //if the searchterm isn't blank
 if($searchterm != ""){
